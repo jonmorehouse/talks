@@ -227,16 +227,20 @@ Don't do this (see previous slide). In fact, check that any library you use hand
 
 ## Mobile
 
-No need for any extra logic for storing / adding in cookie information to the request on mobile
+Simplify client logic by doing what you are already doing ...
 
-~~~ swift
+~~~ python
 func saveTokenWithResponse(response: NSHTTPURLResponse) {
+  // check for the token in the response header
   if let token = httpResponse.allHeaderFields["X-Token"] as? String {
       SSKeychain.setPassword(token, forService: "buzzfeed-video", account: "api-token")
   }
 }
 
 func addTokenToRequest(request: NSMutableURLRequest) {
+  request.addValue("application/json", forHTTPHeaderField: "Accept")
+  request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
   if let token = SSKeychain.passwordForService('api-token', account: "api-token") {
       request.addValue(token, forHTTPHeaderField: "X-Token")
   }
@@ -244,11 +248,14 @@ func addTokenToRequest(request: NSMutableURLRequest) {
 
 ~~~
 
+No need for `NSHTTPCookieStorage` cookie container :)
+
 -- 
 
 ## Further Reading
 
-
-
-
+* [Avoiding the database with cryptography](https://neosmart.net/blog/2015/using-hmac-signatures-to-avoid-database-writes/)
+* [JWT "None" Vulnerability](https://auth0.com/blog/2015/03/31/critical-vulnerabilities-in-json-web-token-libraries)
+* [JWT Draft](https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32)
+* [JOSE Draft / Spec](http://jose.readthedocs.org/en/latest/)
 
