@@ -208,7 +208,7 @@ Don't do this (see previous slide). In fact, check that any library you use acco
   * acl
 * `curl -H "X-Token: jwt"` - the token header inherently lives *inside* the request
 * no need for a *session* store
-* user session therefore lives inside of the token
+* user session is an ephemeral resource that gets passed around
 
 -- 
 
