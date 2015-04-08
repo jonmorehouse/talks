@@ -9,10 +9,6 @@ theme: sudodoki/reveal-cleaver-theme
 
 --
 
-## Outline
-
---
-
 ## What is a JWT?
 
 1. a token generated from 3 parts:
@@ -66,7 +62,7 @@ there are 7 registered claims (according to IEFT draft):
 
 --
 
-## You can add whatever you want to a JWT, though...
+## You can add whatever claims you want to a JWT, though...
 
 ~~~ json
 {
@@ -95,7 +91,7 @@ JOSE Header = Javascript Object Signing and Encryption
 
 ~~~ json
 {
-  "typ": "mime-type"
+  "typ": "mime-type",
   "alg": "usually HMAC SHA-256"
 }
 ~~~
@@ -128,7 +124,7 @@ b64encode(json.dumps(claim))
 
 
 ~~~
-$ eyJzdWIiOiAic3ViamVjdCIsICJhdWQiOiAibW9iaWxlX2lvc19hcHAiLCAiaXNzIjogImlzc3VlciBjbGFpbSIsICJqdGkiOiAiMTAyMCIsICJleHAiOiAiMjAxNi0wOC0wNV8xMzoyNTowNiIsICJpYXQiOiAiMjAxNS0wNC0wOF8xMzoyNTowNiIsICJhY2NvdW50X2lkIjogIjU1In0=
+eyJzdWIiOiAic3ViamVjdCIsICJhdWQiOiAibW9iaWxlX2lvc19hcHAiLCAiaXNzIjogImlzc3VlciBjbGFpbSIsICJqdGkiOiAiMTAyMCIsICJleHAiOiAiMjAxNi0wOC0wNV8xMzoyNTowNiIsICJpYXQiOiAiMjAxNS0wNC0wOF8xMzoyNTowNiIsICJhY2NvdW50X2lkIjogIjU1In0=
 ~~~
 -- 
 
@@ -184,7 +180,7 @@ token = "".join(token.split(".")[0], new_claim, token.split(".")[2])
 }
 ~~~
 
-Don't do this (see previous slide). In fact, check that any library you use handles encryption accordingly.
+Don't do this (see previous slide). In fact, check that any library you use accounts for this situation.
 
 -- 
 
@@ -199,7 +195,7 @@ Don't do this (see previous slide). In fact, check that any library you use hand
 
 * refresh tokens are **only** granted with a `client_id` `client_secret` combination
 * access tokens are short lived. A compromised token is only usable for a few minutes at most
-* refresh tokens **only** used for requesting a new access_token
+* refresh tokens **only** used for requesting a *new* access token
 
 --
 
@@ -211,7 +207,7 @@ Don't do this (see previous slide). In fact, check that any library you use hand
   * admin privileges?
   * acl
 * `curl -H "X-Token: jwt"` - the token header inherently lives *inside* the request
-* no need for a *session_table*
+* no need for a *session* store
 * user session therefore lives inside of the token
 
 -- 
@@ -229,24 +225,7 @@ Don't do this (see previous slide). In fact, check that any library you use hand
 
 Simplify client logic by doing what you are already doing ...
 
-~~~ python
-func saveTokenWithResponse(response: NSHTTPURLResponse) {
-  // check for the token in the response header
-  if let token = httpResponse.allHeaderFields["X-Token"] as? String {
-      SSKeychain.setPassword(token, forService: "buzzfeed-video", account: "api-token")
-  }
-}
-
-func addTokenToRequest(request: NSMutableURLRequest) {
-  request.addValue("application/json", forHTTPHeaderField: "Accept")
-  request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-  if let token = SSKeychain.passwordForService('api-token', account: "api-token") {
-      request.addValue(token, forHTTPHeaderField: "X-Token")
-  }
-}
-
-~~~
+<script src="https://gist.github.com/anonymous/c3cfd8720043af689947.js"></script>
 
 No need for `NSHTTPCookieStorage` cookie container :)
 
