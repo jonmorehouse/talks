@@ -149,6 +149,8 @@ https://facebook.github.io/react-native/
 
 https://github.com/enaqx/awesome-react
 
+\#reactnative (freenode)
+
 --
 ## A Few Closing thoughts
 
