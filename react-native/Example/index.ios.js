@@ -31,7 +31,6 @@ var styles = StyleSheet.create({
   label: {
     width: 200,
     top: 80,
-    height: 20,
     alignSelf: 'center',
     fontSize: 20,
   },
@@ -61,7 +60,6 @@ var App = React.createClass({
   },
 
   render: function() {
-
     return (
         <Component>
           <Text style={styles.label}>{this.state.label}</Text>

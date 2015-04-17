@@ -744,7 +744,7 @@ code {
   <section>
     <h2 id="what-_is_-react-">What <em>is</em> React?</h2>
 <ol>
-<li>same &quot;experience&quot; across different platforms [ios, web, android?]</li>
+<li>learn once, <em>kind_of</em> write everywhere</li>
 <li>stateful components vs stateful applications</li>
 <li>command-r :)</li>
 </ol>
@@ -753,7 +753,7 @@ code {
   <section>
     <h2 id="what-react-_is_-not">What React <em>is</em> Not</h2>
 <ol>
-<li>build once deploy everywhere</li>
+<li><em>build once</em> deploy everywhere</li>
 <li>one size fits all - games, video, etc</li>
 <li>PhoneGap</li>
 </ol>
@@ -795,6 +795,80 @@ code {
     <span class="tag">&lt;/<span class="title">Component</span>&gt;</span>
   },
 });</span></code></pre>
+
+  </section>
+  <section>
+    <h2 id="rendering">Rendering</h2>
+<ol>
+<li><em>NOT</em> a webview</li>
+<li>build view in background using <em>JavascriptCore</em></li>
+<li>apply a diff to the currently visible view eg: <strong>git</strong></li>
+</ol>
+
+  </section>
+  <section>
+    <h2 id="components-are-state-views">Components are State Views</h2>
+<pre><code class="lang-javascript">&lt;Text&gt;{<span class="keyword">this</span>.state.textLabel}&lt;<span class="regexp">/Text&gt;</code></pre>
+<p>State dictates when a view is <em>rerendered</em></p>
+<pre><code class="lang-javascript">React.CreateClass({
+  getInitialState: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> {
+      textLabel: <span class="string">"Text Label"</span>,
+    };
+  },
+
+  changeText: <span class="keyword">function</span>(text) {
+    <span class="keyword">this</span>.setState({textLabel: text});<span class="comment">//forces a re-render</span>
+  },
+
+  render: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> (
+      <span class="xml"><span class="tag">&lt;<span class="title">Text</span>&gt;</span>{this.state.textLabel}<span class="tag">&lt;/<span class="title">Text</span>&gt;</span>
+    );
+  },
+});</span></code></pre>
+
+  </section>
+  <section>
+    <h2 id="getting-started">Getting Started</h2>
+<p>React comes with an easy way of bootstrapping apps.</p>
+<pre><code class="lang-bash">$ npm install -g react-native-cli</code></pre>
+<pre><code class="lang-bash">$ react-native init Example</code></pre>
+<pre><code class="lang-bash">$ vim Example/index.ios.js</code></pre>
+
+  </section>
+  <section>
+    <h2 id="swift-cocoapods-react">Swift + Cocoapods + React</h2>
+<p>Can also bootstrap via Cocoapods</p>
+<pre><code class="lang-ruby">target <span class="string">'Locent'</span> <span class="keyword">do</span>
+  pod <span class="string">'React'</span>, <span class="symbol">:git</span> =&gt; <span class="string">'https://github.com/facebook/react-native.git'</span>, <span class="symbol">:tag</span> =&gt; <span class="string">'v0.3.11'</span>
+  pod <span class="string">'React/RCTText'</span>, <span class="symbol">:git</span> =&gt; <span class="string">'https://github.com/facebook/react-native.git'</span>, <span class="symbol">:tag</span> =&gt; <span class="string">'v0.3.11'</span>
+<span class="keyword">end</span></code></pre>
+<pre><code class="lang-go"><span class="comment">// bootstrap parent view</span>
+let reactURL = NSURL(<span class="typename">string</span>: <span class="string">"http://localhost:8081/index.ios.bundle"</span>)
+
+let rootView = RCTRootView(bundleURL: reactURL, moduleName: <span class="string">"Example"</span>,  
+  launchOptions: <span class="constant">nil</span>)
+
+controller.view.addSubview(rootView)
+rootView.frame = UIScreen.mainScreen().bounds</code></pre>
+
+  </section>
+  <section>
+    <h2 id="resources">Resources</h2>
+<p><a href="https://facebook.github.io/react-native/">https://facebook.github.io/react-native/</a></p>
+<p><a href="https://github.com/enaqx/awesome-react">https://github.com/enaqx/awesome-react</a></p>
+
+  </section>
+  <section>
+    <h2 id="a-few-closing-thoughts">A Few Closing thoughts</h2>
+<ol>
+<li>react-native is early </li>
+<li>a lot of libraries <em>only</em> a few weeks in</li>
+<li>spend some time getting comfortable with the source code</li>
+<li>understand state and 2 way data</li>
+<li><em>alot</em> of react web is applicable / good starting point</li>
+</ol>
 
   </section>
 
