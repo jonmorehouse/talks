@@ -9,13 +9,14 @@ var {
   AppRegistry,
   StyleSheet,
   TextInput,
+  Text,
   View,
 } = React;
 
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'orange',
+    backgroundColor: 'rgba(150, 150, 150, 0.8)',
   },
 
   input: {
@@ -25,8 +26,15 @@ var styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: 'white',
     alignSelf: 'center',
-  }
+  },
 
+  label: {
+    width: 200,
+    top: 80,
+    height: 20,
+    alignSelf: 'center',
+    fontSize: 20,
+  },
 });
 
 var Component = React.createClass({
@@ -42,17 +50,24 @@ var Component = React.createClass({
 });
 
 var App = React.createClass({
+  getInitialState: function() {
+    return {
+      label: "label"
+    };
+  },
+
   callback: function(text) {
-    console.log(text);
+    this.setState({label: text});
   },
 
   render: function() {
+
     return (
         <Component>
+          <Text style={styles.label}>{this.state.label}</Text>
           <TextInput
             style={styles.input}
-            callback={this.callback}
-            onEndEditing={(event) => this.props.callback(event.nativeEvent.text)} 
+            onEndEditing={(event) => this.callback(event.nativeEvent.text)} 
             placeholder="Text Input"
           />
         </Component>
