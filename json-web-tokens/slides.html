@@ -899,7 +899,7 @@ token = <span class="string">""</span>.join(token.split(<span class="string">"."
 </li>
 <li><code>curl -H &quot;X-Token: jwt&quot;</code> - the token header inherently lives <em>inside</em> the request</li>
 <li>no need for a <em>session</em> store</li>
-<li>user session therefore lives inside of the token</li>
+<li>user session is an ephemeral resource that gets passed around</li>
 </ul>
 
   </section>
