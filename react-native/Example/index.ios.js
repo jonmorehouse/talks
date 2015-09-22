@@ -62,7 +62,10 @@ var App = React.createClass({
   render: function() {
     return (
         <Component>
-          <Text style={styles.label}>{this.state.label}</Text>
+          <Text style={styles.label}>
+            {this.state.label}
+          </Text>
+
           <TextInput
             style={styles.input}
             onEndEditing={(event) => this.callback(event.nativeEvent.text)} 
