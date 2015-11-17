@@ -11,24 +11,25 @@ controls: false
 
 ## Video Transcoding
 
-Bringing self-hosted video content to BuzzFeed!
+BuzzFeed does self hosted videos!
 
 -- 
 
 ## Goals
 
 1. self hosted video
-2. support for HLS/mp4/flv outputs
-3. integration with video-upload / videoapp
-4. robust, scalable, etc etc
+2. support hls/flv/mp4
+3. video-upload/videoapp 
 
 --
 
 ## Challenges
 
-* lots of external moving parts (ios/android, videoapp, video-upload, videoapp-cms)
-* integration with different cloud services (Elastic Transcoder, SQS)
-* productionizing!
+### _lots of moving parts_
+
+* videoapp (ios/android)
+* video-upload
+* videoapp-cms
 
 -- 
 
@@ -53,6 +54,22 @@ Bringing self-hosted video content to BuzzFeed!
 ## Transcoder Topology
 
 ![Topology](https://github.com/buzzfeed/video-infra/raw/master/docs/images/transcoder_service_topology.png)
+
+--
+
+## API design
+
+* public interface for triggering jobs
+* state stored internally
+* external workers communicate state via HTTP
+
+-- 
+
+## Worker Design
+
+* work dispensed by NSQ
+* state communicated back via HTTP
+* easy to test individual components
 
 --
 

@@ -738,25 +738,25 @@ code {
     <div class="slides">
         <section>
     <h2 id="video-transcoding">Video Transcoding</h2>
-<p>Bringing self-hosted video content to BuzzFeed!</p>
+<p>BuzzFeed does self hosted videos!</p>
 
   </section>
   <section>
     <h2 id="goals">Goals</h2>
 <ol>
 <li>self hosted video</li>
-<li>support for HLS/mp4/flv outputs</li>
-<li>integration with video-upload / videoapp</li>
-<li>robust, scalable, etc etc</li>
+<li>support hls/flv/mp4</li>
+<li>video-upload/videoapp</li>
 </ol>
 
   </section>
   <section>
     <h2 id="challenges">Challenges</h2>
+<h3 id="_lots-of-moving-parts_"><em>lots of moving parts</em></h3>
 <ul>
-<li>lots of external moving parts (ios/android, videoapp, video-upload, videoapp-cms)</li>
-<li>integration with different cloud services (Elastic Transcoder, SQS)</li>
-<li>productionizing!</li>
+<li>videoapp (ios/android)</li>
+<li>video-upload</li>
+<li>videoapp-cms</li>
 </ul>
 
   </section>
@@ -783,6 +783,23 @@ code {
   <section>
     <h2 id="transcoder-topology">Transcoder Topology</h2>
 <p><img src="https://github.com/buzzfeed/video-infra/raw/master/docs/images/transcoder_service_topology.png" alt="Topology"></p>
+
+  </section>
+  <section>
+    <h2 id="api-design">API design</h2>
+<ul>
+<li>public interface for triggering jobs</li>
+<li>state stored internally</li>
+<li>external workers communicate state via HTTP</li>
+</ul>
+
+  </section>
+  <section>
+    <h2 id="worker-design">Worker Design</h2>
+<ul>
+<li>work dispensed by NSQ</li>
+<li>state communicated back via HTTP</li>
+</ul>
 
   </section>
   <section>
