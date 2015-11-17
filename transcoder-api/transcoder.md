@@ -53,7 +53,7 @@ BuzzFeed does self hosted videos!
 
 ## Transcoder Topology
 
-![Topology](https://github.com/buzzfeed/video-infra/raw/master/docs/images/transcoder_service_topology.png)
+![Topology](./images/transcoder_service_topology.png)
 
 --
 
@@ -75,7 +75,7 @@ BuzzFeed does self hosted videos!
 
 ## Pipeline Topology
 
-![Topology](https://github.com/buzzfeed/video-infra/raw/master/docs/images/videoapp_topology.png)
+![Topology](./images/videoapp_topology.png)
 
 --
 
