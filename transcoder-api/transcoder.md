@@ -81,6 +81,4 @@ BuzzFeed does self hosted videos!
 
 ## It works!
 
-We've been using the video transcoding pipeline in the videoapp for a few weeks now :)
-
-
+![Feed](./images/feed.png)
