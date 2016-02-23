@@ -150,34 +150,20 @@ func TestAppQueries(t *testing.T) {
 ```
 
 
-## What is an interface? (in 2 words)
+## What is an interface? (in 2 32/64 bit words)
 
+* pointer to underlying type
+* pointer to _actual_ data 
 
 ```go
-package main
-
-import (
-  "fmt"
-  "reflect"
-)
-
-type Interface interface {
-  method()
-}
-
-type InterfaceImplementer struct{}
-
-func (i InterfaceImplementer) method() { /* nothing */ }
-
-func main() {
-  var implementer Interface = InterfaceImplementer{}
-  implementer.InterfaceData()
-  value := reflect.ValueOf(implementer)
-  fmt.Println(value.InterfaceData())
+type Interface struct {
+  data []bytes.Byte
+  type *type
 }
 ```
 
 * http://research.swtch.com/interfaces
+* https://github.com/golang/go/blob/master/src/go/types/type.go
 
 ## Interfaces are _implicit_ 
 
