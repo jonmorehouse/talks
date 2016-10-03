@@ -1,0 +1,112 @@
+rig fundamentals
+Docker, ECS and some best practices
+
+
+Jon Morehouse
+Erick Yellott
+
+* What is rig?
+
+a workflow on top of Docker and AWS ECS for building and deploying container services
+
+* What is Docker?
+
+- tool for building images
+- tool for distributing images
+- tool for creating containers
+
+.image docker.png _ 800
+
+* What is ECS?
+
+- api for running container services
+- api for managing container service resources
+- contains a docker registry to host images
+- contains a scheduler to deploy containers
+
+.image aws_ecs.png _ 500
+
+* What's a Docker Image?
+
+- a snapshot of a container
+- a series of image layers, each representative of a provisioning step
+- a building block for other images
+
+.image docker_image.png _ 500
+
+* What's a Docker Registry
+
+- a database of images
+- compatible with `docker push` and `docker pull`
+
+* Docker Images + Rig
+
+- we distribute images and run them as containers
+- rig builds, tests, and uploads images into the registry (ECR)
+- rig schedules container services on AWS ECS
+.image rig-image-list.png
+
+* How does rig build images?
+
+- `GitHub` pushes changes to `rig`
+- `rig` creates images using `docker` `build`
+- `rig` runs tests
+- each image is deterministically tagged
+- `docker push` an image into the registry (ECR)
+
+* builder example
+.image ecr-push.png
+
+* How does rig schedule images?
+
+- rig turns a `service.yml` into a set of API calls to AWS ECS
+- rig tells ECS how many resources, instances and where to schedule a container
+.image service.yml.png
+
+* Docker Image: the common piece
+
+- docker images fundamental to each part
+- docker images are entire services
+- the system is only as good as the images we ship
+
+* Building Better Images
+
+- large, bloated images slow down each step of the process
+- harder to schedule, less reliable uploads/downloads
+
+* Thinking about caching
+
+- layers build on one another
+- low layer changes trigger more rebuilds
+.image layers.png
+
+* COPY vs ADD vs RUN
+
+- using ADD to fetch packages from remote URLs is strongly discouraged; use curl or wget instead.
+- COPY and ADD look at files, RUN looks at the command
+
+* Remove extra dependencies
+
+- if your image needs something for build, but not to run remove it!
+- reduce image size where possible
+- eg: remove apt resources after installing deps
+- eg: remove node_modules after compiling assets
+
+* Minimize layers
+
+- fewer layers means fewer build steps
+- balance your layers so that they aren't rebuilt too often
+- layers are logical steps of the build process
+
+* Check your base images
+
+- alpine linux is an alternative linux distribution
+- smaller images
+- do you need glibc?
+.image base-images.png
+
+* Links
+
+.link  https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/ Docker Best Practices
+.link http://blog.thoward37.me/articles/where-are-docker-images-stored/ Where Are Images Stored
+.link https://www.youtube.com/watch?v=sK5i-N34im8&feature=youtu.be Cgroups, Namespaces and Beyond
