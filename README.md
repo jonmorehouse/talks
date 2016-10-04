@@ -8,6 +8,7 @@
 - [Instrumentation](instrumentation/README.md) - Instrumenting services using DataDog and Statsd
 - [Ownership In Rust](rust-ownership/README.md) - Overview of ownership in Rust
 - [API Gateway in Go](gateway-go/README.md) - Building an API Gateway in Go
+- [Rig + Docker + ECS](rig-docker-ecs/README.md) - Rig, Docker and AWS ECS
 
 ## Upcoming Talks / Proposals:
 

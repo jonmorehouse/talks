@@ -1,0 +1,178 @@
+Instrumentation 
+outcome oriented monitoring
+
+Jon Morehouse
+a computer obsessed geek
+@jonmorehouse
+@buzzfeed
+
+* Let's start with a case study
+
+* VideoStats
+
+- 40thousand-ish lines of python
+- 12+ different types of workers
+- collection, rollups, api-integrations, dashboards 
+- able to think for itself
+
+.image  images/videostats.png _ 500
+
+* VideoStats is broken!
+
+.image  images/giphy_broken.png
+
+* but we have monitoring!
+
+.image  images/videostats_flower.png _ 1000
+
+* and logs!
+
+.image  images/debugging_videostats.png
+
+* so what's the problem??
+
+* wait ... what is even broken guys?
+
+.image  images/giphy_nonsense.png _ 1200
+
+Seriously though, this thing works for me?
+
+* What if you ...
+
+- didn't build this system?
+- don't know anything about this system?
+- don't know where logs are?
+- don't have access to this system?
+- don't know what is even broken?
+
+
+* What if you could?
+
+- define "broken"
+- define "working"
+- debug, without knowing the system
+- debug, without firing off random (dangerous?) `*sh` commands
+- debug, without being an engineer
+
+.image  images/giphy_dreaming.png _ 1000
+
+* Graphs and dashboards
+
+.image  images/single_graph.png _ 550
+
+.image  images/dashboard.png _ 1000
+
+* 
+
+.image  images/giphy_awesome.png _ 1200
+
+* enter ... statsd
+
+.image  images/statsd.png _ 1000
+
+* what is statsd?
+
+- a stats protocol
+- an aggregator of stats
+- a way to declare success/failure
+- simple!!!
+
+.image  images/statsd_simple.png
+
+* just a few lines of code...
+
+.code samples/statsd.py
+
+* what is datadog?
+
+- a statsd backend
+- graphs and dashboards for our metrics
+- shareable, collaborative, informative
+- simple, accessible and helpful for everyone
+
+.image  images/datadog.png
+
+* what sorts of metrics?
+
+- increments
+
+.image  images/incr_graph.png _ 680
+
+- times
+
+.image  images/timing_graph.png _ 680
+
+* rad!!!!
+
+.image images/emoji_tears_of_joy.png _ 500
+
+* another case study: distributed-stats-storage 
+
+- a highly, distributed system
+- lots of moving parts
+- queuereaders, background jobs, rollups, archival
+- dependency to many other systems
+- lots of teams involved
+
+*     
+
+.image  images/giphy_oh_my.png _ 1200
+
+* outcome oriented monitoring
+
+- does the website work?
+- does the system do what it's supposed to?
+- are user's being affected?
+
+* what is important
+
+- did the data get where it was supposed too?
+- how much of the data is there?
+- were things faster / slower than usual?
+- how does this compare to last week, last month?
+
+* what isn't important
+
+- cpu
+- memory
+- any individual process
+- any individual host
+
+* distributed stats storage dashboard
+
+.image  images/distributed_stats_dashboard.png _ 1000
+
+* Distributed Systems require instrumentation
+
+- more things that can break
+- no one knows everything
+- the code doesn't tell the whole story
+
+.image  images/giphy_who_built_this.png _ 900
+
+* the 3am test
+
+If someone gets woken up by the fail whale at 3am, can they debug your system?
+
+.image  images/fail_whale.png _ 800
+
+* the development experience
+
+- part of planning, speccing, scoping
+- _not_ an after thought
+- part of the review process
+
+.image  images/github_comments.png _ 920
+
+* the alerting experience
+
+- good metrics == good alerts
+- only wake folks up when something is _actually_ broken
+- everyone and anyone can respond
+
+* Some final thoughts 
+
+- instrumentation, for the greater good
+- systems must pass the "3am" test
+- build better dashboards (together)
+- everyone can take responsibility

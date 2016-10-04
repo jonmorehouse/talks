@@ -1,0 +1,128 @@
+An Intro to Rust
+memory management concepts for non-rustaceans!
+
+Jon Morehouse
+a computer obsessed geek
+@jonmorehouse
+@buzzfeed
+
+* Who am I?
+
+- engineer @ BuzzFeed
+- weekend rustacean
+- hacking on rust-nsq
+
+* Rust (lang)
+
+.image images/rust_logo.png
+
+* Buzz words, buzz words everywhere!
+
+# buzz light year emoji
+
+* Buzz words (Rust Edition)
+
+- Ownership
+- Lifetimes
+- Borrowing
+- Zero Cost Abstractions
+
+* Ownership / Borrowing / Lifetimes 
+
+- (safe) memory management
+- (safe) memory sharing
+- (safe) concurrency
+
+* The rust way
+
+manual, safe memory management
+
+* Zero Cost Abstractions
+
+compiler errors everywhere!
+
+* Buzzword driven development 
+
+but actually, why Rust?
+
+- fast
+- safe
+- embeddable (FFI)
+
+* Ownership
+
+- allocation / deallocation is explicit
+- variable scoping matters
+- assignment changes ownership
+
+* Move Semantics
+
+- variables can own their memory
+- ownership is transferred, not shared
+- move your memory, lose your memory
+
+* an example in Rust:
+
+.code samples/ownership.rs
+(doesn't compile)
+.code samples/ownership_error.rs
+
+* an example in another language
+
+.code samples/ownership.go
+
+* how do you know when to deallocate things?
+
+* in rust
+
+- Resource Allocation is Initialization (RAII)
+- scoping controls memory bounds
+- memory is deallocated in the order it is allocated
+
+* variable order matters
+
+.code samples/order.rs
+.code samples/order_error
+
+* other languages
+
+- reference counting
+- garbage collection
+- runtime semantics
+
+* If ownership is explicit, how is memory shared?
+
+* Borrow Semantics
+
+a way to hand out a temporary reference
+
+- controlled and explicit
+- scope / lifetime matters
+- mutability is important
+
+* Borrow rules
+
+- exactly one mutable reference
+- one or more immutable references
+- borrowed references can't outlive the owner
+
+.code samples/borrow.rs 
+
+* Lifetime Semantics
+
+- a way to define how long data lives
+- implicit for some types
+- ownership / borrow rules
+- compile time concept
+
+* Lifetime rules
+
+- part of the type
+- used to ensure references live long enough relative to peers
+- thinking in scopes
+
+.code samples/lifetime.rs
+
+
+
+
