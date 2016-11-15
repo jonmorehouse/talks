@@ -1,0 +1,234 @@
+10 times go was totally perfect for our API Gateway
+
+Jon Morehouse
+
+
+* Started with a cat meme and now we're here...
+
+:lets start with some background before hopping into the fun stuff
+:I'm assuming most of you have heard about BuzzFeed before
+:if not, I'm pretty sure the best way to describe us is a cat-meme site turned
+:full fledged media company. We've built a thing or two along the way ...
+
+- 50+ api services
+- 200+ total services
+- 100+ engineers
+
+
+* The "average" service
+
+:by default, we turn to python to prototype and help us understand problem
+:sets. Most services tend to be focused APIs with some of these characteristics.
+:Note, not all of these characteristics are good!!
+
+- talks to one or more downstreams
+- built in Python or Go
+- JSON over HTTP(s)
+- BYO-(ratelimit|auth|acl|networking)
+
+
+* Our culture
+
+:so when I came to buzzfeed, I thought I had a ton of operational experience.
+:Just over a year into coding, I figured the best way to battle test a
+:production database was to throw it in a docker container in the cloud and
+:start firing requests at it from my computer. The more tools you use, the
+:better your service right? I've learned a thing or three in the past 2 years
+:and its started with our culture of simplicity
+
+- keep it operationally simple
+- instrument it, and instrument it some more
+- let your code tell you what to change
+
+:oh, and also we love go and love it when we need to use it
+- :heart: Go
+
+
+* So how does my team fit into all of this?
+
+I work on a team called Platform Infrastructure. We basically work to make our
+fellow engineers' lives easier. This means identifying problems, finding
+solutions and delivering on those solutions
+
+- platform infrastructure
+- every teammate felt productive in go
+
+
+* Back to the "average" service
+
+- talks to one or more downstreams
+- built in Python or Go
+- JSON over HTTP(s)
+- BYO-(rateliimiting|auth|acl|networking)
+
+
+* Service Level Problems
+
+:good friends let friends bring their own beer
+:good colleagues don't make all 100+ of their colleagues bring their own auth, rate
+:limiting, networking and ACL!
+
+- no "one" way to talk to services
+- no "one" way to allow/deny access
+- no insight/control over bad actors
+
+* Organization Level Problems
+
+
+:At any type of scale, engineering problems and organizational problems can be
+:one and the same. In our case, some of these problems were prevalent at a
+:higher organizational level. We basically had no one stop shop to show us the
+:who/what/when/where and why in our systems
+
+- what systems are slow/face :shrug:
+- who is using what :shrug:
+- do we have bad actors :shrug:
+
+
+* Solutions
+
+:Problems don't always correlate directly 1:1 to a solution. We sat down and
+:started coming up a solution to some of these problems.
+
+- provide authentication / ACL
+- protect against bad actors
+- provide a single, sane way to communicate
+- provide out of the box insights / instrumentation
+
+
+* Research - Test - Prototype
+
+:I'm pretty sure I didn't sleep for a week in this phase. The fun and exciting
+:parts of this job are when you have a white board full of problems and what
+:needs to be built and have the chance to test, evaluate and figure out the best
+:way to solve them. Everything has tradeoffs and the fun is finding those tradeoffs
+
+- central vs decentralized
+- inhouse vs oss
+- first consumers
+
+
+* Lets Build an API Gateway!
+
+:We spent a few weeks digging into requirements and decided to build a
+:centralized proxy service in house to solve our needs after two major conclusions:
+
+:First, building a set of decentralized services or tools would be harder to
+:integrate. We have a lot of different services and wanted the most minimally
+:invasive integration path possible. The tradeoff of maintaining a central, SPOF
+:service far outweighed (for us) the amount of work to upgrade all of these
+:services.
+
+:Secondly, there wasn't a centralized solution in the OSS market who's
+:dependencies we had great production, operational experience with. We wanted
+:something simple that we were operationally familiar with so we could grow it
+:as requirements changed.
+
+- central proxy
+- central auth
+- central authentication
+- central rate limiting
+
+
+* Version 1: answering questions with Tornado
+
+:So we decide to build this hip new proxy service and my first instinct is
+:to go home, stay up until 5 in the morning working on my own open source version and
+:come into work late the next day.
+
+:So anyways, I get into work and mid espresso realize that we have way too many
+:questions about this product to build it in go at first
+
+- what type of rate limiting
+- what type of authentication
+- how do we define upstreams?
+- how do we get services onboarded as quickly as possible?
+- what metrics are important?
+
+
+* Version 1: lots of answers!
+
+
+:I'm a believer that the best way to understand a problem is to write some code
+:to solve it. You learn so much by just doing.
+
+:We learned a ton, for instance we realized that a really simple rolling window
+:rate limiting algorithm on top of redis worked fine. We learned that using
+:MySQL and Redis for access control and authentication worked fine if we passed
+:around a simple token.
+
+:We also learned that the biggest engineering challenge we were facing was
+:maintaining high throughput as a proxy. This came down to having a lack of
+:control over the way we were handling concurrency in our runtime.
+
+- simple token auth
+- simple rolling rate limits
+- high level upstream metrics (status codes, timeouts, response latencies)
+- low level upstream metrics (tcp connect time, dns lookup times)
+- concurrency is really important
+
+
+* Why was concurrency really important?
+
+
+:Our runtime taught us some hard lessons about concurrency as we productionized
+:and onboarded users into this system.
+
+:By instrumenting our system, we learned some upstreams were fast and some were
+:really slow. By observing how upstreams responded to varying amounts of traffic
+:we realized that we needed absolute control over the number of concurrent
+:requests an upstream could receive. We also needed to ensure that a high
+:traffic upstream didn't affect its neighbors.
+
+:While some of these problems were possible to solve in tornado/python we
+:immediately found ourselves fighting our system at a level of abstraction that
+:was low enough and difficult enought to feel wrong.
+
+:Situations like this are where "engineering" instinct is really important (and
+:is also a good excuse to try out new tools). We instinctually felt from our
+:experience with python and tornado that this was wrong
+
+- control an upper bound on the total concurrent requests an upstream receives
+- protect against _too_ many requests at once
+- protect against queue waiting timeouts
+- protect against noisy neighbors
+- predictable performance as throughput increases to some upper bound
+
+
+* Why Look at Go?
+
+:We immediately reached for Go once we realized we were fighting at the wrong
+:levels with Tornado.
+
+:This happens to be in Go's sweet spot. Experience told us that Go's concurrency
+:primitives would give us the flexibility and control to solve these problems in
+:a lot of different ways.
+
+:We also felt confident that Go was a good tool to grow this service with. As a
+:core piece of infrastructure it's important to ensure that you have plenty of
+:"headroom" for optimizations and future requirements. We weren't confident in
+:this before
+
+- experience with Go
+- instinctually knew this was in Go's "sweet spot"
+- we're passionate about Go and the Go community!
+- felt confident prototyping a rewriting in Go
+
+
+* V2: Prototyping in Go
+
+- prototyped a rewrite in days
+- naive approach to concurrency (lean on the runtime)
+- early opportunities around instrumentation
+
+
+* Naive concurrency
+
+
+* Instrumentation
+
+
+
+* Controlling concurrency
+
+
