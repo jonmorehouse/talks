@@ -219,16 +219,83 @@ solutions and delivering on those solutions
 
 - prototyped a rewrite in days
 - naive approach to concurrency (lean on the runtime)
-- early opportunities around instrumentation
+- powerful runtime buys leeway to mature
 
 
 * Naive concurrency
 
+:gos runtime is fast. goroutines are light weight and multiplexed over a shared
+:os level thread pool. Each stack is small so memory usage tends to grow
+:predictably as goroutines do
 
-* Instrumentation
+:as a first pass, we leveraged the runtime and its ability to handle serious concurrency
 
+TODO: put example_1.go in here
+
+
+* Instrumenting TCP
+
+:gos standard library provides a great level of abstraction out of the box. Our
+:Gateway service required few outside
+
+:by leveraging httputil's ReverseProxy we were able to let Go handle the
+:complexities of proxying an http request. Things like hop headers and request
+:came out of the box, allowing us to focus on things that we were more interested in
+
+:go provided excellent hooks into the underlying tcp stack while still allowing
+:us to leverage the standard library tooling for proxying. This was a special
+:feeling and just seemed "right"
+
+TODO: put in transport example here
+
+
+* Instrumenting DNS
+
+:instrumenting the TCP layer revealed slow TCP connect times. Because our
+:upstreams were defined by dns hostnames, tcp connections require looking up an
+:A record for a dns entry and then using that to connect directly to a host.
+
+:we were able to add our own custom Dialer
+
+TODO: add an example showing how we used DNS
 
 
 * Controlling concurrency
 
+:a second pass at concurrency in this prototype involved taking a look at the
+:concept of upstream worker pools
 
+
+* Instrumenting concurrency
+
+
+* Removing Synchronization
+
+
+* But what about performance!
+
+- 4x throughput
+- 1/2
+- all while requiring 1/3rd the resource reservations
+
+
+* Maturing with Go
+
+:time after time, go has just felt right. A combination of the standard
+:library's ease of use and ability to fine tune and control what feels like
+:anything and everything with a strong, performant runtime has proven to be a
+:perfect sweet spot for this application.
+
+:Concurrency, standard library and performance aside however; the key take away
+:we've learned from using Go is that its a good tool to grow with. Building
+:applications in Go give you the ability to build something fast and grow with
+:it. Because of the control over both concurrency and basic functionality in
+:stdlib, Go provides plenty of headroom for maturing and optimizing
+:applications.
+
+- concurrency
+- control
+- headroom
+
+
+*
